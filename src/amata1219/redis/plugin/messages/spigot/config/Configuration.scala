@@ -1,11 +1,14 @@
-package amata1219.redis.plugin.messages.spigot
+package amata1219.redis.plugin.messages.spigot.config
 
 import java.io.{File, IOException, InputStream, InputStreamReader}
 import java.nio.charset.StandardCharsets
 
+import amata1219.redis.plugin.messages.common.config
+import amata1219.redis.plugin.messages.spigot.RedisPluginMessages
+import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.{FileConfiguration, YamlConfiguration}
 
-class Configuration(val fileName: String) {
+class Configuration(val fileName: String) extends config.Configuration[ConfigurationSection] {
 
   private val plugin: RedisPluginMessages = RedisPluginMessages.instance
   private val file: File = new File(plugin.getDataFolder, fileName)
@@ -43,4 +46,9 @@ class Configuration(val fileName: String) {
     value
   }
 
+  override def string(path: String): String = config.getString(path)
+
+  override def int(path: String): Int = config.getInt(path)
+
+  override def section(path: String): config.Configuration[ConfigurationSection] = new Section(config.getConfigurationSection(path))
 }

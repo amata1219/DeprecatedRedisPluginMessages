@@ -1,6 +1,5 @@
 package amata1219.redis.plugin.messages.spigot.event;
 
-import com.sun.istack.internal.NotNull;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import scala.collection.immutable.List;
