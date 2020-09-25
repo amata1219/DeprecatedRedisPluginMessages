@@ -1,6 +1,6 @@
 package amata1219.redis.plugin.messages.common
 
-import amata1219.redis.plugin.messages.common.message.{Destination, Message}
+import amata1219.redis.plugin.messages.common.message.{RedisChannel, Message}
 import io.lettuce.core.api.StatefulRedisConnection
 
 class RedisMessagePublisher(
@@ -9,11 +9,11 @@ class RedisMessagePublisher(
   val serverName: String
 ){
 
-  def publish(destinationServer: String, channel: String, message: String*): Long = {
-    publish(new Destination(bungeeName, destinationServer), new Message(serverName, channel, message:_*))
+  def publish(destinationServer: String, channel: String, message: List[String]): Long = {
+    publish(new RedisChannel(bungeeName, destinationServer), new Message(serverName, channel, message:_*))
   }
 
-  def publish(destination: Destination, message: Message): Long = synchronized {
+  def publish(destination: RedisChannel, message: Message): Long = synchronized {
     connection.sync().publish(destination.toString, message.toString)
   }
 

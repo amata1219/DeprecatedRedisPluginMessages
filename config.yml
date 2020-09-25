@@ -1,0 +1,9 @@
+linked-bungee-name: 'bungee1'
+server-name-in-bungee-network: 'server1'
+redis-server:
+  url: localhost
+  port: 6379
+  password: ''
+  resources:
+    io-thread-pool-size: 4
+    computation-thread-pool-size: 4
