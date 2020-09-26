@@ -4,13 +4,11 @@ import java.util
 
 import amata1219.redis.plugin.messages.bungee.config.ConfigurationFile
 import amata1219.redis.plugin.messages.bungee.listener.RedisMessageReceivedListener
-import amata1219.redis.plugin.messages.common.{RedisClientCreation, RedisMessagePublisher}
-import amata1219.redis.plugin.messages.common.message.RedisChannel
+import amata1219.redis.plugin.messages.common.{Identifier, RedisClientCreation, RedisMessagePublisher}
 import io.lettuce.core.RedisClient
 import io.lettuce.core.api.StatefulRedisConnection
 import io.lettuce.core.pubsub.StatefulRedisPubSubConnection
 import net.md_5.bungee.api.plugin.Plugin
-import net.md_5.bungee.config
 
 import scala.jdk.CollectionConverters._
 
@@ -34,15 +32,11 @@ class RedisPluginMessages extends Plugin with RedisPluginMessagesAPI {
     standaloneConnection = client.connect()
     pubSubConnection = client.connectPubSub()
 
-    val file: config.Configuration = configuration.config
-    val linkedBungeeName: String = file.getString("linked-bungee-name")
-
     //指定した要素に基づいてpublishするインスタンスを作成する
-    publisher = new RedisMessagePublisher(pubSubConnection, linkedBungeeName, RedisChannel.BUNGEE)
+    publisher = new RedisMessagePublisher(pubSubConnection, Identifier.BUNGEE_CORD)
 
     //このサーバーがsubscribeするチャンネルを指定する
-    val channelSubscribed = new RedisChannel(linkedBungeeName, RedisChannel.BUNGEE)
-    pubSubConnection.sync().subscribe(channelSubscribed.toString)
+    pubSubConnection.sync().subscribe(Identifier.BUNGEE_CORD)
 
     listener = new RedisMessageReceivedListener()
     pubSubConnection.addListener(listener)

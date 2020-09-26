@@ -1,7 +1,5 @@
 package amata1219.redis.plugin.messages.common
 
-import java.util.IllegalFormatException
-
 import amata1219.redis.plugin.messages.common.exception.IllegalFormattedMessageException
 import amata1219.redis.plugin.messages.common.message.MessageSeparator
 import io.lettuce.core.pubsub.RedisPubSubListener
@@ -10,7 +8,6 @@ trait RedisMessageReceiver extends RedisPubSubListener[String, String] {
 
   override def message(channel: String, message: String): Unit = {
     val components: Array[String] = message.split(MessageSeparator.SEPARATOR)
-
 
     if (components.length < 3) throw new IllegalFormattedMessageException(s"Received illegal formatted redis message on $channel: $message")
 
