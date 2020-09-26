@@ -1,5 +1,5 @@
-linked-bungee-name: 'bungee1'
-server-name-in-bungee-network: 'server1'
+linked-bungee-name: 'bungeecord'
+server-name-in-bungee-network: 'server'
 redis-server:
   url: localhost
   port: 6379

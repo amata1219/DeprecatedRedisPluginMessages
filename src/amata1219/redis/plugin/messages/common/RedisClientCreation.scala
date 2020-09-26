@@ -1,15 +1,15 @@
 package amata1219.redis.plugin.messages.common
 
-import amata1219.redis.plugin.messages.common.config.Configuration
+import amata1219.redis.plugin.messages.common.config.{HierarchicalConfiguration, OverallConfiguration}
 import io.lettuce.core.resource.DefaultClientResources
 import io.lettuce.core.{ClientOptions, RedisClient, RedisURI}
 
 object RedisClientCreation {
 
-  def createClientBasedOn(config: Configuration[_]): RedisClient = {
-    val redisSection: Configuration[_] = config.section("redis-server")
+  def createClientBasedOn(config: OverallConfiguration[_, _]): RedisClient = {
+    val redisSection: HierarchicalConfiguration[_] = config.section("redis-server")
 
-    val resourcesSection: Configuration[_] = redisSection.section("resources")
+    val resourcesSection: HierarchicalConfiguration[_] = redisSection.section("resources")
     val ioThreadPoolSize = resourcesSection.int("io-thread-pool-size")
     val computationThreadPoolSize = resourcesSection.int("computation-thread-pool-size")
 

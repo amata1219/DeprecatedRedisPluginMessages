@@ -1,20 +1,20 @@
-package amata1219.redis.plugin.messages.spigot
+package amata1219.redis.plugin.messages.bungee
 
 import java.util
 
-import amata1219.redis.plugin.messages.common.message.RedisChannel
+import amata1219.redis.plugin.messages.bungee.config.Configuration
+import amata1219.redis.plugin.messages.bungee.listener.RedisMessageReceivedListener
 import amata1219.redis.plugin.messages.common.{RedisClientCreation, RedisMessagePublisher}
-import amata1219.redis.plugin.messages.spigot.config.Configuration
-import amata1219.redis.plugin.messages.spigot.listener.RedisMessageReceivedListener
+import amata1219.redis.plugin.messages.common.message.RedisChannel
 import io.lettuce.core.RedisClient
 import io.lettuce.core.api.StatefulRedisConnection
 import io.lettuce.core.pubsub.StatefulRedisPubSubConnection
-import org.bukkit.configuration.file.FileConfiguration
-import org.bukkit.plugin.java.JavaPlugin
+import net.md_5.bungee.api.plugin.Plugin
+import net.md_5.bungee.config
 
 import scala.jdk.CollectionConverters._
 
-class RedisPluginMessages extends JavaPlugin() with RedisPluginMessagesAPI {
+class RedisPluginMessages extends Plugin with RedisPluginMessagesAPI {
 
   RedisPluginMessages.instance = this
 
@@ -34,15 +34,15 @@ class RedisPluginMessages extends JavaPlugin() with RedisPluginMessagesAPI {
     standaloneConnection = client.connect()
     pubSubConnection = client.connectPubSub()
 
-    val file: FileConfiguration = configuration.config
+    val file: config.Configuration = configuration.config
     val linkedBungeeName: String = file.getString("linked-bungee-name")
     val serverNameInBungeeNetwork: String = file.getString("server-name-in-bungee-network")
 
     //指定した要素に基づいてpublishするインスタンスを作成する
-    publisher = new RedisMessagePublisher(pubSubConnection, linkedBungeeName, serverNameInBungeeNetwork)
+    publisher = new RedisMessagePublisher(pubSubConnection, linkedBungeeName, RedisChannel.BUNGEE)
 
     //このサーバーがsubscribeするチャンネルを指定する
-    val channelSubscribed = new RedisChannel(linkedBungeeName, serverNameInBungeeNetwork)
+    val channelSubscribed = new RedisChannel(linkedBungeeName, RedisChannel.BUNGEE)
     pubSubConnection.sync().subscribe(channelSubscribed.toString)
 
     listener = new RedisMessageReceivedListener()
@@ -56,8 +56,8 @@ class RedisPluginMessages extends JavaPlugin() with RedisPluginMessagesAPI {
     client.shutdown()
   }
 
-  override def sendRedisPluginMessage(channel: String, message: util.List[String]): Unit = {
-    publisher.publish(RedisChannel.BUNGEE, channel, message.asScala.toList)
+  override def sendRedisPluginMessage(destinationServerName: String, channel: String, message: util.List[String]): Unit = {
+    publisher.publish(destinationServerName, channel, message.asScala.toList)
   }
 
 }
