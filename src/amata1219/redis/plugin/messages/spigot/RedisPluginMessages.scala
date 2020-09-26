@@ -54,6 +54,7 @@ class RedisPluginMessages extends JavaPlugin() with RedisPluginMessagesAPI {
     pubSubConnection.close()
     standaloneConnection.close()
     client.shutdown()
+    client.getResources.shutdown()
   }
 
   override def sendRedisPluginMessage(channel: String, message: util.List[String]): Unit = {

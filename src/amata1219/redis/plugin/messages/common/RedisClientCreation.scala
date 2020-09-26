@@ -22,7 +22,7 @@ object RedisClientCreation {
       .autoReconnect(true)
       .build()
 
-    val address: String = s"${redisSection.string("url")}:${redisSection.string("port")}"
+    val address: String = s"${redisSection.string("url")}:${redisSection.int("port")}"
 
     val uri: RedisURI = redisSection.string("password") match {
       case password if !password.isEmpty => RedisURI.create(s"redis://$password@$address")

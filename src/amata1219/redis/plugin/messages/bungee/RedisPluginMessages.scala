@@ -36,7 +36,6 @@ class RedisPluginMessages extends Plugin with RedisPluginMessagesAPI {
 
     val file: config.Configuration = configuration.config
     val linkedBungeeName: String = file.getString("linked-bungee-name")
-    val serverNameInBungeeNetwork: String = file.getString("server-name-in-bungee-network")
 
     //指定した要素に基づいてpublishするインスタンスを作成する
     publisher = new RedisMessagePublisher(pubSubConnection, linkedBungeeName, RedisChannel.BUNGEE)
@@ -54,6 +53,7 @@ class RedisPluginMessages extends Plugin with RedisPluginMessagesAPI {
     pubSubConnection.close()
     standaloneConnection.close()
     client.shutdown()
+    client.getResources.shutdown()
   }
 
   override def sendRedisPluginMessage(destinationServerName: String, channel: String, message: util.List[String]): Unit = {
