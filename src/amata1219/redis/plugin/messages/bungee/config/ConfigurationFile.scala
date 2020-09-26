@@ -1,17 +1,14 @@
 package amata1219.redis.plugin.messages.bungee.config
 
-import java.io.{BufferedWriter, File, FileInputStream, FileOutputStream, IOException, OutputStreamWriter, PrintWriter}
+import java.io._
 
 import amata1219.redis.plugin.messages.bungee.RedisPluginMessages
 import amata1219.redis.plugin.messages.common.config.{HierarchicalConfiguration, OverallConfiguration}
-import amata1219.redis.plugin.messages.common.message.RedisChannel
-import com.google.common.io.ByteStreams
-import net.md_5.bungee.config
-import net.md_5.bungee.config.{ConfigurationProvider, YamlConfiguration}
+import net.md_5.bungee.config.{Configuration, ConfigurationProvider, YamlConfiguration}
 
 import scala.io.Source
 
-class Configuration(fileName: String) extends OverallConfiguration[config.Configuration, config.Configuration](fileName) {
+class ConfigurationFile(fileName: String) extends OverallConfiguration[Configuration, Configuration](fileName) {
 
   private val plugin: RedisPluginMessages = RedisPluginMessages.instance
   private val file: File = new File(plugin.getDataFolder, fileName)
@@ -57,6 +54,6 @@ class Configuration(fileName: String) extends OverallConfiguration[config.Config
 
   override def get(path: String): Any = config.get(path)
 
-  override def section(path: String): HierarchicalConfiguration[config.Configuration] = new ConfigurationHierarchy(config.getSection(path))
+  override def section(path: String): HierarchicalConfiguration[Configuration] = new ConfigurationHierarchy(config.getSection(path))
 
 }

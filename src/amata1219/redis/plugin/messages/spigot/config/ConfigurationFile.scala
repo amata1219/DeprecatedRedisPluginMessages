@@ -8,7 +8,7 @@ import amata1219.redis.plugin.messages.spigot.RedisPluginMessages
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.{FileConfiguration, YamlConfiguration}
 
-class Configuration(fileName: String) extends OverallConfiguration[FileConfiguration, ConfigurationSection](fileName) {
+class ConfigurationFile(fileName: String) extends OverallConfiguration[FileConfiguration, ConfigurationSection](fileName) {
 
   private val plugin: RedisPluginMessages = RedisPluginMessages.instance
   private val file: File = new File(plugin.getDataFolder, fileName)

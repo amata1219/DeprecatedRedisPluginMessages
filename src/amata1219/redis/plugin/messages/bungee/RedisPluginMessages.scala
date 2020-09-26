@@ -2,7 +2,7 @@ package amata1219.redis.plugin.messages.bungee
 
 import java.util
 
-import amata1219.redis.plugin.messages.bungee.config.Configuration
+import amata1219.redis.plugin.messages.bungee.config.ConfigurationFile
 import amata1219.redis.plugin.messages.bungee.listener.RedisMessageReceivedListener
 import amata1219.redis.plugin.messages.common.{RedisClientCreation, RedisMessagePublisher}
 import amata1219.redis.plugin.messages.common.message.RedisChannel
@@ -18,7 +18,7 @@ class RedisPluginMessages extends Plugin with RedisPluginMessagesAPI {
 
   RedisPluginMessages.instance = this
 
-  val configuration = new Configuration("config.yml")
+  val configuration = new ConfigurationFile("config.yml")
   configuration.create()
   configuration.reload()
 

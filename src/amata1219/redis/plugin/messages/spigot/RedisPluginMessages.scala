@@ -4,7 +4,7 @@ import java.util
 
 import amata1219.redis.plugin.messages.common.message.RedisChannel
 import amata1219.redis.plugin.messages.common.{RedisClientCreation, RedisMessagePublisher}
-import amata1219.redis.plugin.messages.spigot.config.Configuration
+import amata1219.redis.plugin.messages.spigot.config.ConfigurationFile
 import amata1219.redis.plugin.messages.spigot.listener.RedisMessageReceivedListener
 import io.lettuce.core.RedisClient
 import io.lettuce.core.api.StatefulRedisConnection
@@ -18,7 +18,7 @@ class RedisPluginMessages extends JavaPlugin() with RedisPluginMessagesAPI {
 
   RedisPluginMessages.instance = this
 
-  val configuration = new Configuration("config.yml")
+  val configuration = new ConfigurationFile("config.yml")
   configuration.create()
   configuration.reload()
 

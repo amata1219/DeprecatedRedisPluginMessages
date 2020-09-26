@@ -1,8 +1,8 @@
 package amata1219.redis.plugin.messages.bungee.listener
 
 import amata1219.redis.plugin.messages.bungee.RedisPluginMessages
+import amata1219.redis.plugin.messages.bungee.event.RedisMessageReceivedEvent
 import amata1219.redis.plugin.messages.common.RedisMessageReceiver
-import amata1219.redis.plugin.messages.spigot.event.RedisMessageReceivedEvent
 
 import scala.jdk.CollectionConverters._
 
