@@ -22,32 +22,32 @@ class RedisPluginMessages extends JavaPlugin() with RedisPluginMessagesAPI {
 
   var client: RedisClient = _
   var standaloneConnection: StatefulRedisConnection[String, String] = _
-  var pubSubConnection: StatefulRedisPubSubConnection[String, String] = _
+  var connectionToSubscribe: StatefulRedisPubSubConnection[String, String] = _
   var publisher: RedisMessagePublisher = _
   var listener: RedisMessageReceivedListener = _
 
   override def onEnable(): Unit = {
     client = RedisClientCreation.createClientBasedOn(configuration)
 
+    connectionToSubscribe = client.connectPubSub()
     standaloneConnection = client.connect()
-    pubSubConnection = client.connectPubSub()
 
     val serverName: String = configuration.config.getString("universally-unique-server-name")
 
     //指定した要素に基づいてpublishするインスタンスを作成する
-    publisher = new RedisMessagePublisher(pubSubConnection, serverName)
-
-    //このサーバーがsubscribeするチャンネルを指定する
-    pubSubConnection.sync().subscribe(serverName)
+    publisher = new RedisMessagePublisher(standaloneConnection, serverName)
 
     listener = new RedisMessageReceivedListener()
-    pubSubConnection.addListener(listener)
+    connectionToSubscribe.addListener(listener)
+
+    //このサーバーがsubscribeするチャンネルを指定する
+    connectionToSubscribe.sync().subscribe(serverName)
   }
 
   override def onDisable(): Unit = {
-    pubSubConnection.removeListener(listener)
-    pubSubConnection.close()
     standaloneConnection.close()
+    connectionToSubscribe.removeListener(listener)
+    connectionToSubscribe.close()
     client.shutdown()
     client.getResources.shutdown()
   }

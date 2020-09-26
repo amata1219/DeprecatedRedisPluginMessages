@@ -22,7 +22,7 @@ class RedisPluginMessages extends Plugin with RedisPluginMessagesAPI {
 
   var client: RedisClient = _
   var standaloneConnection: StatefulRedisConnection[String, String] = _
-  var pubSubConnection: StatefulRedisPubSubConnection[String, String] = _
+  var connectionToSubscribe: StatefulRedisPubSubConnection[String, String] = _
   var publisher: RedisMessagePublisher = _
   var listener: RedisMessageReceivedListener = _
 
@@ -30,21 +30,21 @@ class RedisPluginMessages extends Plugin with RedisPluginMessagesAPI {
     client = RedisClientCreation.createClientBasedOn(configuration)
 
     standaloneConnection = client.connect()
-    pubSubConnection = client.connectPubSub()
+    connectionToSubscribe = client.connectPubSub()
 
     //指定した要素に基づいてpublishするインスタンスを作成する
-    publisher = new RedisMessagePublisher(pubSubConnection, Identifier.BUNGEE_CORD)
+    publisher = new RedisMessagePublisher(standaloneConnection, Identifier.BUNGEE_CORD)
 
     //このサーバーがsubscribeするチャンネルを指定する
-    pubSubConnection.sync().subscribe(Identifier.BUNGEE_CORD)
+    connectionToSubscribe.sync().subscribe(Identifier.BUNGEE_CORD)
 
     listener = new RedisMessageReceivedListener()
-    pubSubConnection.addListener(listener)
+    connectionToSubscribe.addListener(listener)
   }
 
   override def onDisable(): Unit = {
-    pubSubConnection.removeListener(listener)
-    pubSubConnection.close()
+    connectionToSubscribe.removeListener(listener)
+    connectionToSubscribe.close()
     standaloneConnection.close()
     client.shutdown()
     client.getResources.shutdown()
