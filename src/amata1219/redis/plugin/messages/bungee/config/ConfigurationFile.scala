@@ -37,7 +37,7 @@ class ConfigurationFile(fileName: String) extends OverallConfiguration[Configura
         out <- new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file))))
       } {
         Source.fromInputStream(in).getLines()
-          .filterNot(_.startsWith("server-name-in-bungee-network"))
+          .filterNot(_.startsWith("universally-unique-server-name"))
           .foreach(out.println)
       }
     }
